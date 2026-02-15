@@ -1,27 +1,54 @@
-# Dolphin
+# Dolphin Dashboard
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.20.
+## Description
+Dolphin Dashboard is an **Angular 18 admin dashboard** for the Dolphin application.  
+It allows managers to fully oversee delivery operations, orders, drivers, and client management. The dashboard leverages **Firebase real-time updates** to track deliveries as they happen.
 
-## Development server
+### Key Features
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- **Driver Management**
+  - View all drivers
+  - Track availability: ready or not ready
+  - Real-time status updates via Firebase
 
-## Code scaffolding
+- **Order Management**
+  - Create, edit, and delete orders
+  - View all active orders in real-time
+  - Track order details:
+    - Invoice code
+    - Order value
+    - Client name
+    - Assigned driver
+    - Distance
+    - Order timing (start, pickup, delivery)
+    - Address and geolocation
+    - Order status
+    - Notes
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- **Client Management**
+  - Full CRUD for clients
+  - Add clients manually as orders are received via phone
 
-## Build
+- **Delivery Management**
+  - Track ongoing deliveries in real-time
+  - Assign drivers
+  - Full CRUD for deliveries
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+- **Reports & Analytics**
+  - Daily, monthly, and custom reports
+  - Insights on orders, deliveries, revenue, and driver performance
 
-## Running unit tests
+### Technologies Used
+- Angular 18
+- TypeScript
+- HTML / CSS / SCSS
+- RxJS
+- Firebase (for real-time updates)
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### Notes
+- This repository contains **UI and code structure** for the dashboard.  
+- Any live data (orders, clients, deliveries) are **connected to the real system** and are not included in this repo for security.  
+- Safe to clone or review for learning, testing, or portfolio purposes.
 
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+### How to Run
+1. Clone the repository:
