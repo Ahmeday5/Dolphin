@@ -1,0 +1,151 @@
+.adminTitle {
+  background: var(--main-color);
+  color: var(--third-color);
+  padding: 10px;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 30px;
+}
+
+.btn-add {
+  background: var(--main-color);
+  color: var(--bg-main);
+  width: 100%;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.btn-add:focus {
+  background: var(--main-color);
+  color: var(--bg-main);
+}
+
+/************  table *****************/
+
+.custom-table {
+  overflow-x: auto;
+}
+
+.custom-table-design {
+  border: var(--third-color) !important;
+  font-weight: bold !important;
+}
+
+.custom-table-design thead th {
+  color: var(--main-color);
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 100%;
+  padding: 15px !important;
+}
+
+.custom-table-design tbody tr {
+  background: var(--second-color);
+}
+
+.custom-table-design td {
+  font-weight: 800;
+  font-size: 15px;
+  line-height: 22px;
+  color: var(--main-color);
+  padding: 6px !important;
+}
+
+.btn-edit {
+  color: var(--main-color);
+}
+
+.btn-edit:focus {
+  color: var(--main-color);
+  border: none;
+}
+
+.btn-delete {
+  color: var(--main-color);
+}
+
+.btn-delete:focus {
+  color: var(--main-color);
+  border: none;
+}
+
+.status-pending {
+  display: inline-block;
+  padding: 5px 10px;
+  background-color: var(--main-color);
+  color: var(--bg-main);
+  border-radius: 4px;
+}
+
+.status-delivered {
+  display: inline-block;
+  padding: 5px 10px;
+  background-color: var(--second-color);
+  color: var(--third-color);
+  border-radius: 4px;
+}
+
+/*********form*************/
+
+.modal .modal-header .modal-title {
+  color: var(--main-color) !important;
+  font-weight: bold;
+}
+
+.modal .modal-body form .form-section {
+  position: relative;
+}
+
+.modal .modal-body form .form-section .password-toggle {
+  position: absolute;
+  top: 60%;
+  left: 2%;
+}
+
+.modal .modal-body form .form-section .form-label {
+  font-size: 22px;
+  font-weight: bold;
+  color: var(--main-color);
+}
+
+form .form-section .form-control,
+form .form-section .form-select {
+  border: 2px solid var(--main-color);
+  padding: 12px 15px;
+  border-radius: 12px;
+}
+
+form .form-section .form-control:focus,
+form .form-section .form-select:focus {
+  border-color: var(--main-color);
+  box-shadow: none;
+  outline: none;
+}
+
+form .form-section .form-control::placeholder {
+  color: rgba(109, 105, 105, 1);
+  font-family: var(--font-arabic) !important;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 100%;
+}
+
+form .btn-save {
+  width: 45%;
+  background: var(--main-color);
+  color: var(--bg-main);
+  font-size: 25px;
+  padding: 0;
+  font-weight: bold;
+  border-radius: 8px;
+}
+
+form .btn-cansel {
+  width: 30%;
+  background: #d9d9d9;
+  color: var(--main-color);
+  font-size: 21px;
+  padding: 0;
+  font-weight: bold;
+  border-radius: 8px;
+}

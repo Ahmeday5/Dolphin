@@ -1,0 +1,40 @@
+/********* All-Padination *************/
+.All-Padination {
+  display: flex;
+  justify-content: space-around;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+}
+
+.pagination .page-item {
+  border: 1px solid var(--main-color);
+  border-radius: 12px;
+  margin-right: 5px;
+}
+
+.pagination .page-item.active {
+  background: var(--main-color);
+  color: var(--third-color);
+}
+
+.pagination .page-link {
+  border: none;
+  color: var(--third-color);
+  font-weight: bold;
+  font-size: 15px;
+  line-height: 22px;
+  vertical-align: middle;
+  box-shadow: none !important;
+  background: transparent !important;
+  transition: border 0.3s ease;
+}
+
+.ellipsis {
+  color: #6c757d;
+  cursor: default;
+  pointer-events: none;
+}

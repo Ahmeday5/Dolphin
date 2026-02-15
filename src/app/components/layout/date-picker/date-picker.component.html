@@ -1,0 +1,7 @@
+<div class="date-input-container">
+  <input name="date" type="date" class="form-control custom-date-input" (change)="onDateChange($event)" />
+  @if (selectedDate) {
+  <span class="date-value">{{ selectedDate | date:'d MMMM yyyy' }}</span>
+  }
+
+</div>

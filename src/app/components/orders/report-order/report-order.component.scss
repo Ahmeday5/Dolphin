@@ -1,0 +1,85 @@
+.Search input {
+  border: 1px solid var(--main-color);
+}
+
+.reportOrderTitle {
+  background: var(--main-color);
+  color: var(--third-color);
+  padding: 10px;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 30px;
+}
+
+/************  table *****************/
+
+.custom-table {
+  overflow-x: auto;
+}
+
+.custom-table-design {
+  border: var(--third-color) !important;
+  font-weight: bold !important;
+}
+
+.custom-table-design thead th {
+  color: var(--main-color);
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 100%;
+  padding: 15px !important;
+}
+
+.custom-table-design tbody tr {
+  background: var(--second-color);
+}
+
+.custom-table-design td {
+  font-weight: 800;
+  font-size: 15px;
+  line-height: 22px;
+  color: var(--main-color);
+  padding: 6px !important;
+}
+
+.btn-edit {
+  color: var(--main-color);
+}
+
+.btn-edit:focus {
+  color: var(--main-color);
+  border: none;
+}
+
+.btn-delete {
+  color: var(--main-color);
+}
+
+.btn-delete:focus {
+  color: var(--main-color);
+  border: none;
+}
+
+.status-pending {
+  display: inline-block;
+  padding: 5px 10px;
+  background-color: var(--main-color);
+  color: var(--bg-main);
+  border-radius: 4px;
+}
+
+.status-delivered {
+  display: inline-block;
+  padding: 5px 10px;
+  background-color: var(--second-color);
+  color: var(--third-color);
+  border-radius: 4px;
+}
+
+.status-InDelivery {
+  display: inline-block;
+  padding: 5px 10px;
+  background-color: var(--third-color);
+  color: var(--main-color);
+  border-radius: 4px;
+}

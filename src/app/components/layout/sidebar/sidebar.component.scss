@@ -1,0 +1,139 @@
+/* تنسيق حاوية الـ Sidebar */
+.sidebar {
+  background: var(--main-color); /* لون الخلفية الأزرق */
+  height: 100vh; /* ارتفاع الشاشة بالكامل */
+  width: 17vw;
+  max-width: 250px; /* الحد الأقصى للعرض */
+  min-width: 180px; /* الحد الأدنى للعرض */
+  position: fixed; /* تثبيت الـ Sidebar */
+  top: 0; /* من أعلى الشاشة */
+  right: 0; /* محاذاة لليمين (لأن الاتجاه rtl) */
+  left: auto; /* تثبيت على اليمين */
+  z-index: 1000; /* فوق باقي العناصر */
+  font-family: var(--font-latin); /* الخط العربي */
+  font-weight: 600; /* وزن الخط */
+  line-height: 100%; /* ارتفاع السطر */
+  text-align: right; /* محاذاة النص لليمين */
+  overflow-y: auto; /* التمرير العمودي إذا زاد المحتوى */
+  overflow-x: hidden; /* منع التمرير الأفقي */
+  transition: right 0.3s ease-in-out; /* تأثير انتقال سلس لفتح/إغلاق الـ Sidebar */
+}
+
+.sidebar:not(.sidebar-open) {
+  right: -100%;
+}
+
+/* تنسيق رأس الـ Sidebar */
+.sidebar-header {
+  text-align: center; /* محاذاة في المنتصف */
+  margin-bottom: 2rem; /* هامش سفلي */
+  width: 70%; /* عرض اللوجو */
+  margin: 20px auto; /* توسيط أفقي */
+  height: auto; /* ارتفاع تلقائي */
+}
+
+.sidebar-header .logo img {
+  width: 100%; /* عرض اللوجو بالكامل */
+  transition: all 0.3s ease; /* تأثير انتقال سلس */
+}
+
+.sidebar-header .logo h4 {
+  font-family: var(--font-latin);
+  font-weight: 800;
+  font-size: 15px;
+  line-height: 100%;
+  text-align: center;
+  color: var(--second-color);
+  margin-top: 20px;
+  letter-spacing: 0.5px;
+}
+
+/* تنسيق قائمة التنقل */
+.nav-menu {
+  list-style: none; /* إزالة النقاط */
+  padding: 0; /* إزالة الـ padding */
+  margin: 0; /* إزالة الـ margin */
+}
+
+.nav-item {
+  margin-bottom: 0.5rem; /* هامش سفلي */
+  margin-right: 5px; /* هامش يمين */
+  margin-left: 5px; /* هامش يسار */
+}
+
+/* تنسيق الروابط */
+.nav-link {
+  text-decoration: none; /* إزالة التسطير */
+  margin-bottom: 10px; /* هامش سفلي */
+  width: 90%; /* عرض كامل */
+  height: 40px; /* ارتفاع ثابت */
+  font-family: var(--font-arabic); /* الخط العربي */
+  font-weight: 600; /* وزن الخط */
+  font-size: 15px; /* حجم الخط */
+  line-height: 100%; /* ارتفاع السطر */
+  display: flex; /* استخدام flexbox */
+  align-items: center; /* محاذاة رأسية */
+  color: var(--third-color); /* اللون الأبيض */
+  padding: 15px; /* padding داخلي */
+}
+
+.nav-link .icon-text {
+  display: flex; /* استخدام flexbox */
+  align-items: center; /* محاذاة رأسية */
+  flex-grow: 1; /* يملأ المساحة المتاحة */
+}
+
+.nav-link .icon-text i {
+  margin-left: 7px;
+}
+
+.nav-link i {
+  flex-shrink: 0; /* منع تقليص الأيقونة */
+}
+
+.nav-link span {
+  margin: 0 5px; /* هامش يمين ويسار */
+}
+
+/* تنسيق الرابط النشط */
+.nav-active {
+  background-color: var(--third-color);
+  border-radius: 8px;
+  color: var(--second-color); /* اللون الأبيض */
+  height: 45px;
+}
+
+/* تنسيق زر التبديل */
+.toggle-btn {
+  display: none; /* مخفي افتراضيًا على الشاشات الكبيرة */
+  position: fixed;
+  top: 20px; /* الموضع العلوي المطلوب */
+  right: 20px; /* الموضع الأيسر المطلوب */
+  z-index: 1100; /* فوق الـ Sidebar */
+  padding: 5px 10px; /* حجم أكبر قليلاً للراحة */
+  border-radius: 8px; /* زوايا دائرية لمظهر احترافي */
+  background-color: var(--main-color); /* نفس لون الـ Sidebar */
+  border: 2px solid var(--second-color);
+  color: var(--second-color); /* لون الأيقونة */
+  transition: all 0.3s ease-in-out; /* تأثير انتقال سلس للزر */
+}
+
+/* تنسيق الزر عندما يكون الـ Sidebar مفتوحًا */
+.toggle-btn-open {
+  background-color: var(--main-color); /* لون مختلف عند الفتح */
+  color: var(--second-color); /* لون الأيقونة يتغير */
+  right: 210px;
+  top: 2px;
+  border: none;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+@media (max-width: 992px) {
+  .sidebar {
+    width: 100vw;
+  }
+  .toggle-btn {
+    display: block;
+  }
+}

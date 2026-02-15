@@ -1,0 +1,50 @@
+.date-input-container {
+  position: relative;
+  width: 170px; // عرض مشابه للصورة
+  min-height: 50px; // إضافة ارتفاع أدنى لضمان المساحة
+  margin-right: 20px;
+}
+
+.custom-date-input {
+  border: 2px solid var(--main-color);
+  border-radius: 8px;
+  padding: 17px 10px;
+  font-size: 15px;
+  color: var(--main-color);
+  width: 100%;
+  box-sizing: border-box;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  position: relative; // لضبط الموضع
+}
+
+.custom-date-input::-webkit-calendar-picker-indicator {
+  background-image: url('/assets/img/dashboard/date.png');
+  background-size: 16px 16px;
+  width: 16px;
+  height: 16px;
+  border: none;
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.custom-date-input::-webkit-datetime-edit {
+  color: var(--main-color);
+}
+
+.custom-date-input::-webkit-datetime-edit-fields-wrapper {
+  display: none;
+}
+
+.date-value {
+  position: absolute;
+  top: 35%;
+  right: 20px;
+  transform: translateY(-50%);
+  color: var(--main-color);
+  font-size: 20px;
+}

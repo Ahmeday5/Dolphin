@@ -1,0 +1,11 @@
+<div class="content-wrapper">
+  <!-- المحتوى الرئيسي -->
+  <main class="content" [ngClass]="{'full-width': !(isLoggedIn$ | async)}">
+    @if (isLoggedIn$ | async) {
+    <!-- استدعاء كومبوننت الـ header دائمًا -->
+    <app-header></app-header>
+
+    }
+    <router-outlet></router-outlet>
+  </main>
+</div>

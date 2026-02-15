@@ -1,0 +1,37 @@
+<button class="btn btn-primary toggle-btn" [ngClass]="{'toggle-btn-open': isSidebarOpen}" (click)="toggleSidebar()">
+  <i [class]="isSidebarOpen ? 'fa-solid fa-times' : 'fa-solid fa-bars'"></i>
+</button>
+
+<!-- حاوية الـ Sidebar -->
+<aside class="sidebar" [ngClass]="{'sidebar-open': isSidebarOpen}" dir="rtl">
+  <nav class="sidebar-nav" id="sidebar">
+    <!-- رأس الـ Sidebar -->
+    <div class="sidebar-header">
+      <div class="logo" id="sidebarLogo">
+        <a routerLink="/dashboard">
+          <img src="/assets/img/logo-sidbar.png" alt="Logo" loading="lazy" />
+        </a>
+        <h4>شركة الدلتا لتجارة الجملة</h4>
+      </div>
+    </div>
+
+    <!-- قائمة التنقل -->
+    <div>
+      <ul class="nav-menu">
+        <!-- تكرار عناصر القائمة الرئيسية باستخدام @for -->
+        @for (item of menuItems; track item.path) {
+        <li class="nav-item">
+          <a [routerLink]="item.path" class="nav-link" routerLinkActive="nav-active"
+            [routerLinkActiveOptions]="{exact: false}">
+            <div class="icon-text">
+              <!-- الصورة تتغير بناءً على حالة الرابط (نشط أو غير نشط) -->
+              <i [class]="isActive(item.path) ? item.iconActive : item.iconInactive"></i>
+              <span>{{ item.label }}</span>
+            </div>
+          </a>
+        </li>
+        }
+      </ul>
+    </div>
+  </nav>
+</aside>

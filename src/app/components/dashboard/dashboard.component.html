@@ -1,0 +1,239 @@
+<div class="container-fluid mb-2">
+  <div class="row home-page justify-content-between">
+    <div class="mb-2 d-flex justify-content-center flex-column align-items-center">
+        <label class="fw-bold">تتبع مندوب معين:</label>
+        <select #trackingSelect class="form-select" (change)="startTracking(trackingSelect.value)">
+          <option value="0">-- لا تتبع أحد --</option>
+          @for (d of validDeliverymen; track d.id!.toString()) {
+          <option [value]="d.id!.toString()">{{ d.name }} (ID: {{d.id}})</option>
+          }
+        </select>
+    </div>
+    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5 col-12 right-side">
+      <div class="row">
+        <div class="col-md-12">
+          @if (successMessage) {
+          <div class="alert alert-success d-flex align-items-center mt-4" role="alert">
+            <svg class="bi flex-shrink-0 me-2 ms-3" width="24" height="24" role="img" aria-label="Success:">
+              <use xlink:href="#check-circle-fill" />
+            </svg>
+            <div>{{ successMessage }}</div>
+          </div>
+          }
+          @if (errorMessage) {
+          <div class="alert alert-danger d-flex align-items-center mt-4" role="alert">
+            <svg class="bi flex-shrink-0 me-2 ms-3" width="24" height="24" role="img" aria-label="Danger:">
+              <use xlink:href="#exclamation-triangle-fill" />
+            </svg>
+            <div>{{ errorMessage }}</div>
+          </div>
+          }
+          <a class="btn btn-deliveryman">
+            <div class="card-representative scrollDiv">
+              <h2 class="title text-center">قائمة المندوبين</h2>
+              <ul class="list-group agents">
+                @if (Deliverymen.length > 0) {
+                @for (deliveryman of validDeliverymen; track deliveryman.id!.toString()) {
+
+                @if (deliveryman.isAvaliable === true) {
+                <li class="ready list-group-item" (click)="focusOnDeliveryman(deliveryman.id)" style="cursor: pointer;">
+                  <div class="d-flex justify-content-around">
+                    <h5><span class="dot green"></span>{{deliveryman.name}} <small class="text-muted ms-2">{{
+                        getTimeAgo(deliveryman.lastUpdate) }}</small></h5>
+                    <i class="fa-solid fa-bell text-primary fa-lg" style="cursor: pointer;"
+                      (click)="sendBell(deliveryman.id)" title="أرسل تنبيه للمندوب"></i>
+                  </div>
+                  <div class="d-flex justify-content-around">
+                    <h6>جاهز</h6>
+                  </div>
+                </li>
+                }@else {
+                <li class="offline list-group-item mt-3" (click)="focusOnDeliveryman(deliveryman.id)"
+                  style="cursor: pointer;">
+                  <div class="d-flex justify-content-around">
+                    <h5><span class="dot red"></span>{{deliveryman.name}} <small class="text-muted ms-2">{{
+                        getTimeAgo(deliveryman.lastUpdate) }}</small></h5>
+                    <i class="fa-solid fa-bell text-muted" style="cursor: not-allowed;" title="المندوب غير متاح"></i>
+                  </div>
+                  <div class="d-flex justify-content-around">
+                    <h6>خارج الخدمة</h6>
+                  </div>
+                </li>
+                }
+                }
+                }@else {
+
+                @if (loading) {
+                <div class="col-12 text-center">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </div>
+                }
+                }
+              </ul>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-md-12 mt-3">
+          <div class="card-representative text-center">
+            <h2 class="title">إجراءات سريعة</h2>
+            <button type="button" class="btn-createOrder mt-2" data-bs-toggle="modal" data-bs-target="#formModal">إنشاء
+              طلب جديد +</button>
+          </div>
+        </div>
+
+        <!-- Modal لعمل طلب جديد -->
+        <div class="modal fade modal-lg" id="formModal" tabindex="-1" aria-labelledby="formModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header justify-content-center">
+                <h1 class="modal-title" id="formModalLabel">إنشاء طلب توصيل جديد</h1>
+              </div>
+              <div class="modal-body">
+                <!-- SVG Icons -->
+                <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
+                  <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+                    <path
+                      d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                  </symbol>
+                  <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+                    <path
+                      d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                  </symbol>
+                </svg>
+
+                <!-- Success and Error Messages -->
+                @if (successMessage) {
+                <div class="alert alert-success d-flex align-items-center mt-4" role="alert">
+                  <svg class="bi flex-shrink-0 me-2 ms-3" width="24" height="24" role="img" aria-label="Success:">
+                    <use xlink:href="#check-circle-fill" />
+                  </svg>
+                  <div>{{ successMessage }}</div>
+                </div>
+                }
+                @if (errorMessage) {
+                <div class="alert alert-danger d-flex align-items-center mt-4" role="alert">
+                  <svg class="bi flex-shrink-0 me-2 ms-3" width="24" height="24" role="img" aria-label="Danger:">
+                    <use xlink:href="#exclamation-triangle-fill" />
+                  </svg>
+                  <div>{{ errorMessage }}</div>
+                </div>
+                }
+                @if (isLoading) {
+                <div class="text-center mb-4">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">جاري التحميل...</span>
+                  </div>
+                </div>
+                }
+                <form #form="ngForm" (ngSubmit)="handleSubmit()" class="mt-1 needs-validation" novalidate>
+                  <div class="row">
+                    <div class="col-md-6 form-section mb-3">
+                      <label for="orderCode" class="form-label">كود الطلب</label>
+                      <input type="text" placeholder="ادخل كود الطلب" id="orderCode" class="form-control"
+                        name="orderCode" [(ngModel)]="order.orderCode" required #orderCode="ngModel">
+                      <div class="invalid-feedback">يرجى إدخال كود طلب صالح</div>
+                      <div class="valid-feedback">يبدو جيدًا!</div>
+                    </div>
+                    <div class="col-md-6 form-section mb-3">
+                      <label for="priceOrder" class="form-label">قيمة الطلب (جنية)</label>
+                      <input type="number" placeholder=" 150" id="priceOrder" class="form-control" name="priceOrder"
+                        [(ngModel)]="order.amount" required #amount="ngModel">
+                      <div class="invalid-feedback">يرجى إدخال قيمة طلب صالح</div>
+                      <div class="valid-feedback">يبدو جيدًا!</div>
+                    </div>
+                    <div class="col-md-6 form-section mb-3">
+                      <label for="Customer" class="form-label"> العميل</label>
+                      <select id="Customer" class="form-select custom-select" name="Customer" style="cursor: pointer;"
+                        required [(ngModel)]="order.clientId" #clientId="ngModel">
+                        <option disabled selected value="0"> اختر العميل </option>
+                        @for (client of Clients; track client.id) {
+                        <option [value]="client.id">{{ client.name }}</option>
+                        }
+                      </select>
+                      <div class="invalid-feedback">يرجى اختيار عميل</div>
+                      <div class="valid-feedback">يبدو جيدًا!</div>
+                    </div>
+                    <div class="col-md-6 form-section mb-3">
+                      <label for="sendTo" class="form-label"> إرسال الى</label>
+                      <select id="sendTo" class="form-select custom-select" name="sendTo" style="cursor: pointer;"
+                        required [(ngModel)]="order.deliveryManId" #deliveryManId="ngModel">
+                        <option selected disabled value="0"> اختر المندوب </option>
+                        @for (DeliveryMan of availableDeliveryMan; track DeliveryMan.id) {
+                        <option [value]="DeliveryMan.id">{{ DeliveryMan.name }}</option>
+                        }
+                      </select>
+                      <div class="invalid-feedback">يرجى إدخال دليفري</div>
+                      <div class="valid-feedback">يبدو جيدًا!</div>
+                    </div>
+                    <div class="col-md-12 form-section mb-3">
+                      <label for="Address" class="form-label">العنوان</label>
+                      <input type="text" placeholder="القاهرة" id="Address" class="form-control" name="Address"
+                        [(ngModel)]="order.address" required #address="ngModel">
+                      <div class="invalid-feedback">يرجى إدخال عنوان صالح</div>
+                      <div class="valid-feedback">يبدو جيدًا!</div>
+                    </div>
+                    <div class="col-md-12 form-section mb-3">
+                      <label for="notes" class="form-label">ملاحظات</label>
+                      <textarea placeholder="ادخل ملاحظات الطلب" rows="3" id="notes" class="form-control" name="notes"
+                        [(ngModel)]="order.notes" required #notes="ngModel"></textarea>
+                      <div class="invalid-feedback">يرجى إدخال ملاحظات للطلب صالحة</div>
+                      <div class="valid-feedback">يبدو جيدًا!</div>
+                    </div>
+                  </div>
+                  <div class="modal-footer d-flex justify-content-around">
+                    <button type="submit" class="btn btn-save" [disabled]="isLoading"> @if (isLoading) {
+                      <span class="spinner-border spinner-border-sm me-2"></span>
+                      } إرسال الطلب</button>
+                    <button type="button" class="btn btn-cansel" data-bs-dismiss="modal">إلغاء</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 mt-3">
+          <div class="card-representative text-center scrollDiv">
+            <h2 class="title">إجراءات سريعة <span>(طلبات قيد التوصيل)</span></h2>
+            @for (InDeliveryOrder of validInDeliveryOrders; track InDeliveryOrder.orderId!) {
+            <div class="activeOrder  text-center mt-2">
+              <h6>في التوصيل</h6>
+              <h4>{{InDeliveryOrder.deliveryManName}}</h4>
+              <h6> يوصل طلب {{InDeliveryOrder.orderId}} الي {{InDeliveryOrder.clientName}} في
+                {{InDeliveryOrder.address}} </h6>
+            </div>
+            }
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="col-xl-9 col-lg-9 col-md-8 col-sm-7 col-12 left-side d-flex justify-content-center align-items-center align-content-center p-0">
+      <div class="map text-center h-100 w-100">
+        @if (apiLoaded) {
+        <google-map #googleMap height="100%" width="100%" [center]="center" [zoom]="zoom">
+          @for (marker of visibleMarkers; track marker.id) {
+          <map-marker [position]="marker.position" [label]="marker.title.charAt(0)" [title]="marker.title"
+            [options]="{icon: marker.icon}" (mapClick)="openInfo($event, marker.info)">
+          </map-marker>
+          }
+          @for (poly of deliveryPolylines; track poly.orderId) {
+          <map-polyline [path]="poly.path" [options]="poly.options">
+          </map-polyline>
+          }
+        </google-map>
+        } @else {
+        <div class="text-center">
+          <p>جاري تحميل الخريطة...</p>
+          <!-- أو spinner -->
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

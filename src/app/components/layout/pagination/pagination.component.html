@@ -1,0 +1,33 @@
+<div class="All-Pagination mt-3" dir="ltr" *ngIf="totalPages > 1">
+  <nav>
+    <ul class="pagination justify-content-center">
+      <!-- زر الصفحة السابقة -->
+      <li class="page-item" [ngClass]="{'disabled': currentPage === 1}">
+        <button class="page-link" (click)="onPageChange(currentPage - 1)">
+          <i class="fa-solid fa-left-long"></i>
+        </button>
+      </li>
+      <!-- أرقام الصفحات المرئية -->
+      @for (item of pages; track item.type + (item.value || 0)) {
+      @if (item.type === 'page') {
+        <li class="page-item" [ngClass]="{'active': currentPage === item.value}">
+          <button class="page-link" (click)="onPageChange(item.value)">
+            {{ item.value }}
+          </button>
+        </li>
+      }
+      @if (item.type === 'ellipsis') {
+        <li class="page-item disabled">
+          <span class="page-link ellipsis">...</span>
+        </li>
+      }
+      }
+      <!-- زر الصفحة التالية -->
+      <li class="page-item" [ngClass]="{'disabled': currentPage === totalPages}">
+        <button class="page-link" (click)="onPageChange(currentPage + 1)">
+          <i class="fa-solid fa-right-long"></i>
+        </button>
+      </li>
+    </ul>
+  </nav>
+</div>

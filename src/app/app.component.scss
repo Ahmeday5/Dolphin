@@ -1,0 +1,52 @@
+/* تنسيق حاوية الـ Sidebar والمحتوى */
+.content-wrapper {
+  direction: rtl;
+  display: flex;
+  flex-direction: row;
+  min-height: 100vh;
+  background: var(--bg-main) !important;
+  height: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
+/* تنسيق المحتوى الرئيسي */
+.content {
+  background: var(--bg-main) !important;
+  height: auto;
+  width: 100% !important;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+/* تنسيق المحتوى عند عدم وجود Sidebar (مثل صفحات Splash وLogin) */
+.full-width {
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden;
+  background: var(--main-color) !important;
+}
+
+@media (max-width: 992px) {
+  .content {
+    width: 100% !important;
+  }
+
+  .full-width {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .full-width {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .full-width {
+    width: 100% !important;
+  }
+}

@@ -1,0 +1,258 @@
+.btn-deliveryman {
+  width: 100%;
+  border: none;
+  text-align: right;
+}
+
+.btn-deliveryman:focus {
+  width: 100%;
+  border: none;
+}
+
+.card-representative {
+  border: 2px solid var(--main-color);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.card-representative .title {
+  color: var(--main-color);
+  font-weight: bold;
+}
+
+.card-representative .title span {
+  font-size: 15px;
+}
+
+.card-representative .agents {
+  padding: 0;
+  margin: 0;
+}
+
+.card-representative .agents li {
+  padding: 20px 0px;
+  margin: 0;
+  border: none;
+}
+
+.card-representative .agents li h6 {
+  margin-right: 28px;
+}
+
+.card-representative .agents li h3 span {
+  margin-bottom: 2px;
+}
+
+.ready {
+  color: var(--main-color);
+}
+
+.offline {
+  color: var(--third-color);
+}
+
+.ready,
+.offline,
+.busy h3 {
+  font-weight: bold;
+}
+
+.card-representative .agents .dot {
+  width: 15px;
+  height: 15px;
+  margin-left: 5px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.green {
+  background: var(--third-color);
+}
+.red {
+  background: var(--third-color);
+}
+
+.btn-createOrder {
+  background: var(--main-color);
+  border: 1px solid var(--main-color);
+  color: var(--bg-main);
+  border-radius: 25px;
+  padding: 3px 30px;
+  font-weight: bold;
+}
+
+.activeOrder {
+  background: var(--main-color);
+  padding: 10px;
+  border-radius: 8px;
+  color: var(--bg-main);
+}
+
+.left-side {
+  background: #d9d9d9;
+  border-radius: 15px;
+  height: 88vh;
+}
+
+.left-side .map h1 {
+  font-family: var(--font-latin);
+  font-size: 40px;
+  color: var(--main-color);
+}
+
+.modal .modal-header .modal-title {
+  color: var(--main-color) !important;
+  font-weight: bold;
+}
+
+.modal .modal-body form .form-section .form-label {
+  font-size: 22px;
+  font-weight: bold;
+  color: var(--main-color);
+}
+
+form .form-section .form-control,
+form .form-section .form-select {
+  border: 2px solid var(--main-color);
+  padding: 12px 15px;
+  border-radius: 12px;
+}
+
+form .form-section .form-control:focus,
+form .form-section .form-select:focus {
+  border-color: var(--main-color);
+  box-shadow: none;
+  outline: none;
+}
+
+form .form-section .form-control::placeholder {
+  color: rgba(109, 105, 105, 1);
+  font-family: var(--font-arabic) !important;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 100%;
+}
+
+.form-select.custom-select {
+  font-size: 16px;
+  padding: 10px !important;
+  border: 2px solid var(--main-color);
+  border-radius: 12px;
+  color: var(--main-color);
+  background-position: left 0.75rem center; /* السهم على اليسار */
+  width: 100%;
+  box-sizing: border-box;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.form-select.custom-select:focus {
+  border: 2px solid var(--main-color);
+  box-shadow: none;
+  outline: none;
+}
+
+.form-select.custom-select:invalid {
+  border-color: var(--main-color);
+}
+
+form .btn-save {
+  width: 28%;
+  background: var(--main-color);
+  color: var(--bg-main);
+  font-size: 25px;
+  padding: 0;
+  font-weight: bold;
+  border-radius: 8px;
+}
+
+form .btn-cansel {
+  width: 28%;
+  background: #d9d9d9;
+  color: var(--main-color);
+  font-size: 25px;
+  padding: 0;
+  font-weight: bold;
+  border-radius: 8px;
+}
+
+.scrollDiv {
+  height: 35vh;
+  overflow: auto;
+}
+
+.scrollDiv .imgDelivery {
+  width: 50px !important;
+  height: 50px !important;
+  border-radius: 50%;
+}
+
+@media (max-width: 992px) {
+  .btn-deliveryman {
+    text-align: center;
+  }
+
+  .card-representative .title {
+    font-size: 20px;
+  }
+
+  .card-representative h6 {
+    font-size: 15px;
+  }
+  .card-representative h3 {
+    font-size: 20px;
+  }
+
+  .card-representative .agents .dot {
+    width: 9px;
+    height: 9px;
+  }
+
+  .left-side {
+    margin-top: 25px;
+    margin-bottom: 20px;
+  }
+
+  .left-side .map h1 {
+    font-size: 30px;
+  }
+}
+
+/**********************************
+
+.left-side {
+  height: 100vh;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.map {
+  height: 100%;
+  width: 100%;
+}
+
+google-map {
+  height: 100% !important;
+  width: 100% !important;
+  display: block;
+}*/
+
+google-map {
+  height: 100%;
+  width: 100%;
+}
+
+.form-select {
+  background: var(--second-color);
+  color: var(--third-color);
+  width: 70%;
+}
+
+.form-select:focus,
+.form-select:hover {
+  box-shadow: none;
+  border: 1px solid var(--third-color);
+}

@@ -1,0 +1,149 @@
+.header h1 {
+  font-family: var(--font-arabic) !important;
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 100%;
+  color: var(--bg-main);
+  position: relative;
+}
+
+.header h3 {
+  color: var(--bg-main);
+  font-size: 23px;
+}
+
+.header img {
+  width: 300px !important;
+  height: 150px !important;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.form-group {
+  position: relative;
+}
+
+.form-group .form-label {
+  color: var(--bg-main);
+}
+
+.form-control {
+  padding: 7px !important;
+  padding-right: 15px !important;
+  border: 1px solid var(--bg-main) !important;
+  border-radius: 150px;
+  box-shadow: 0px 3px 6px 1px #0000000D;
+}
+
+.form-control::placeholder {
+  color: #d9d9d9;
+  font-family: var(--font-arabic) !important;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 100%;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 74%;
+  left: 1%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  padding: 5px;
+}
+
+.remember {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  margin-right: 15px;
+}
+
+.remember input {
+  margin-left: 5px !important;
+  border: 1px solid var(--bg-main);
+}
+
+.remember label {
+  font-family: var(--font-latin);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--bg-main);
+}
+
+.forgetpass {
+  padding: 0px 15px;
+}
+
+.forgetpass .forgetpassdiv {
+  justify-content: flex-end;
+}
+
+.forgetpass a {
+  font-family: var(--font-latin);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--bg-main);
+}
+
+.submit button {
+  width: 28%;
+  height: 35px;
+  border-radius: 8px;
+  background: var(--second-color);
+  color: var(--main-color);
+  font-family: var(--font-arabic);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 100%;
+  border: 1px solid var(--second-color);
+  cursor: pointer;
+}
+
+@media (max-width: 992px) {
+  .submit button {
+    font-size: 14px;
+    width: 40%;
+  }
+
+  .remember {
+    margin-left: -30px;
+  }
+
+  .header h1::before {
+    width: 30%;
+  }
+
+  .header h1::after {
+    width: 30%;
+  }
+
+  .forgetpass .forgetpassdiv {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 576px) {
+  .submit button {
+    font-size: 13px;
+    width: 40%;
+  }
+
+  .header h1::before {
+    width: 25%;
+  }
+
+  .header h1::after {
+    width: 25%;
+  }
+}
+
+@media (max-width: 400px) {
+  .header h1::before {
+    width: 20%;
+  }
+
+  .header h1::after {
+    width: 20%;
+  }
+}
