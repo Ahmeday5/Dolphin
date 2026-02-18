@@ -69,7 +69,9 @@
               <label for="newPassword" class="form-label">كلمة المرور الجديدة (أدخل كلمة مرور جديدة إذا أردت
                 تغييرها)</label>
               <input type="password" class="form-control" id="newPassword" name="newPassword" [(ngModel)]="newPassword"
-                placeholder="أدخل كلمة مرور جديدة إذا أردت تغييرها" #newPasswordInput="ngModel" />
+                placeholder="أدخل كلمة مرور جديدة إذا أردت تغييرها" #newPasswordInput="ngModel" minlength="4" />
+              <div class="invalid-feedback">يرجى إدخال كلمة مرور جديدة (4 أحرف على الأقل)</div>
+              <div class="valid-feedback">يبدو جيدًا!</div>
             </div>
 
             <!-- أضف input للصورة + معاينة -->

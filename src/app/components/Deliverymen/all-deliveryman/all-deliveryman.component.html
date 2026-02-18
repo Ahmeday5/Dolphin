@@ -112,8 +112,8 @@
                   <div class="col-md-12 form-section mb-3">
                     <label for="name" class="form-label">اسم المندوب</label>
                     <input type="text" placeholder="ادخل الاسم" id="name" class="form-control" name="name"
-                      [(ngModel)]="deliverymen.name" required #name="ngModel">
-                    <div class="invalid-feedback">يرجى إدخال اسم مندوب صالح</div>
+                      [(ngModel)]="deliverymen.name" required minlength="4" #name="ngModel">
+                    <div class="invalid-feedback">يرجى إدخال اسم مندوب صالح (4 أحرف على الأقل)</div>
                     <div class="valid-feedback">يبدو جيدًا!</div>
                   </div>
                   <div class="col-md-12 form-section mb-3">
