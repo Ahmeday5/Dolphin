@@ -899,6 +899,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
           amount: Number(this.order.amount),
           address: this.order.address,
           status: 'Pending',
+          orderCode: this.order.orderCode, // تأكد من إرسال orderCode لـ Firestore
+          notes: this.order.notes || '', // تأكد من إرسال الملاحظات لـ Firestore
         });
 
         this.successMessage = 'تمت إضافة الطلب بنجاح';

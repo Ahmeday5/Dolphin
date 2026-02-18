@@ -127,12 +127,12 @@
                     <label for="password" class="form-label">كلمة المرور</label>
                     <input [type]="showPassword ? 'text' : 'password'" placeholder="ادخل كلمة المرور" id="password"
                       class="form-control" name="password" [(ngModel)]="deliverymen.password" required
-                      #password="ngModel">
+                      #password="ngModel" minlength="4">
                     <span class="password-toggle" (click)="togglePassword()">
                       <i class="fa-regular {{ showPassword ? 'fa-eye-slash' : 'fa-eye' }}"
                         style="color: var(--thrid-color);"></i>
                     </span>
-                    <div class="invalid-feedback">يرجى إدخال كلمة مرور صالحة</div>
+                    <div class="invalid-feedback">يرجى إدخال كلمة مرور صالحة (4 أحرف على الأقل)</div>
                     <div class="valid-feedback">يبدو جيدًا!</div>
                   </div>
                   <div class="modal-footer d-flex justify-content-around">
