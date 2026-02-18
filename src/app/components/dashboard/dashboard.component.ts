@@ -359,7 +359,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     );
 
     this.googleMap.googleMap.panTo(pos);
-    this.googleMap.googleMap.setZoom(18);
+    this.googleMap.googleMap.setZoom(19);
   }
 
   async ngOnInit(): Promise<void> {
@@ -598,7 +598,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.googleMap.googleMap.panTo({ lat, lng });
 
           // نضمن الزوم 18 في **كل** تحديث أثناء التتبع
-          this.googleMap.googleMap.setZoom(18);
+          this.googleMap.googleMap.setZoom(19);
         }
       }
       // لو مفيش تتبع → نعمل fitBounds **هنا فقط** لو عايز

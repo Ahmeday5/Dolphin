@@ -15,6 +15,7 @@ import {
   allDeliverymen,
   DeliverymenResponse,
 } from '../../../types/deliverymen.type';
+import { RealtimeService } from '../../../services/realtime.service';
 @Component({
   selector: 'app-all-deliveryman',
   standalone: true,
@@ -61,7 +62,8 @@ export class AllDeliverymanComponent implements OnInit {
     private apiService: ApiService,
     private router: Router,
     private cdr: ChangeDetectorRef,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private realtime: RealtimeService,
   ) {}
 
   ngOnInit() {
@@ -69,14 +71,14 @@ export class AllDeliverymanComponent implements OnInit {
       this.currentPage,
       this.itemsPerPage,
       this.Deliverymenname,
-      this.Deliveremail
+      this.Deliveremail,
     );
   }
 
   // دالة لعرض الصورة في الـ modal
   showImage(imageUrl?: string) {
     if (imageUrl) {
-      this.selectedImage = `http://78.89.159.126:9393/PharmacyAPI${
+      this.selectedImage = `http://78.89.159.126:9393/PharmacyDolphenAPI${
         imageUrl.startsWith('/') ? '' : '/'
       }${imageUrl}`;
       this.cdr.detectChanges();
@@ -141,7 +143,7 @@ export class AllDeliverymanComponent implements OnInit {
 
     try {
       const response = await firstValueFrom(
-        this.apiService.addDeliverymen(formData)
+        this.apiService.addDeliverymen(formData),
       );
       console.log('Response from Add deliverymen API:', response);
       if (response.success) {
@@ -161,7 +163,7 @@ export class AllDeliverymanComponent implements OnInit {
             this.currentPage,
             this.itemsPerPage,
             this.Deliverymenname,
-            this.Deliveremail
+            this.Deliveremail,
           ); // تحديث الجدول
         }, 3000);
       } else {
@@ -185,7 +187,7 @@ export class AllDeliverymanComponent implements OnInit {
     page: number,
     pageSize: number,
     Deliverymenname: string,
-    Deliveremail: string
+    Deliveremail: string,
   ) {
     this.loading = true;
     this.noDeliverymenMessage = null;
@@ -202,7 +204,7 @@ export class AllDeliverymanComponent implements OnInit {
       .getAllDeliverymen(page, pageSize, cleanDeliverymenname, cleanemail)
       .subscribe({
         next: (
-          response: DeliverymenResponse | { error: boolean; message: string }
+          response: DeliverymenResponse | { error: boolean; message: string },
         ) => {
           console.log('API Response in Component:', response);
           if ('error' in response) {
@@ -262,7 +264,7 @@ export class AllDeliverymanComponent implements OnInit {
         this.currentPage,
         this.itemsPerPage,
         this.Deliverymenname,
-        this.Deliveremail
+        this.Deliveremail,
       );
     }, 300);
   }
@@ -283,7 +285,7 @@ export class AllDeliverymanComponent implements OnInit {
         this.currentPage,
         this.itemsPerPage,
         this.Deliverymenname,
-        this.Deliveremail
+        this.Deliveremail,
       ); // استدعاء دالة جلب البيانات
     }, 300);
   }
@@ -296,39 +298,56 @@ export class AllDeliverymanComponent implements OnInit {
         this.currentPage,
         this.itemsPerPage,
         this.Deliverymenname,
-        this.Deliveremail
+        this.Deliveremail,
       );
     }
   }
 
-  deleteDeliverymen(id: number) {
-    if (confirm('هل أنت متأكد من حذف هذه المندوب')) {
-      this.loading = true;
-      this.apiService.deleteDeliverymen(id).subscribe({
-        next: (response) => {
-          this.DeliverymenMessage = 'تم حذف المندوب بنجاح';
-          setTimeout(() => {
-            this.DeliverymenMessage = null;
-            this.fetchAllDeliverymen(
-              this.currentPage,
-              this.itemsPerPage,
-              this.Deliverymenname,
-              this.Deliveremail
-            );
-          }, 2000);
-          this.loading = false;
-          this.cdr.detectChanges();
-        },
-        error: (error) => {
-          console.error(`خطأ في حذف المندوب ${id}:`, error);
-          this.noDeliverymenMessage = 'فشل حذف المندوب';
-          this.loading = false;
-          setTimeout(() => {
-            this.noDeliverymenMessage = null;
-          }, 2000);
-          this.cdr.detectChanges();
-        },
-      });
+  async deleteDeliverymen(id: number) {
+    if (!confirm(`متأكد من حذف المندوب رقم ${id} نهائيًا؟`)) {
+      return;
+    }
+
+    this.loading = true;
+    this.DeliverymenMessage = '';
+    this.noDeliverymenMessage = '';
+
+    try {
+      // 1. حذف من الـ Backend
+      await firstValueFrom(this.apiService.deleteDeliverymen(id));
+
+      // 2. حذف من Firestore (مهم جدًا للـ dashboard اللي فيه الخريطة)
+      await this.realtime.deleteDeliveryman(id);
+
+      // 3. رسالة نجاح + تحديث الجدول
+      this.DeliverymenMessage = 'تم حذف المندوب بنجاح من النظام';
+
+      // تحديث الجدول محليًا (تحسين UX – مش لازم نستنى الـ API تاني)
+      this.Deliverymen = this.Deliverymen.filter((d) => d.id !== id);
+
+      setTimeout(() => {
+        this.DeliverymenMessage = null;
+        // إعادة جلب البيانات من الـ API (للتأكد من التوافق)
+        this.fetchAllDeliverymen(
+          this.currentPage,
+          this.itemsPerPage,
+          this.Deliverymenname,
+          this.Deliveremail,
+        );
+      }, 1800);
+    } catch (error: any) {
+      console.error('خطأ أثناء حذف المندوب:', error);
+
+      let msg = 'فشل حذف المندوب';
+      if (error.message?.includes('permission-denied')) {
+        msg = 'صلاحيات Firestore غير كافية – تواصل مع المطور';
+      }
+      this.noDeliverymenMessage = msg;
+
+      setTimeout(() => (this.noDeliverymenMessage = null), 4000);
+    } finally {
+      this.loading = false;
+      this.cdr.detectChanges();
     }
   }
 
@@ -358,7 +377,7 @@ export class AllDeliverymanComponent implements OnInit {
     if (!deliveryman.deviceToken) {
       // رسالة ودية وواضحة بدل "مفيش device token"
       alert(
-        `المندوب "${deliveryman.name}" غير متصل حاليًا بالتطبيق.\n\nيرجى الانتظار حتى يقوم بفتح التطبيق على موبايله، ثم يمكنك إرسال التنبيه.`
+        `المندوب "${deliveryman.name}" غير متصل حاليًا بالتطبيق.\n\nيرجى الانتظار حتى يقوم بفتح التطبيق على موبايله، ثم يمكنك إرسال التنبيه.`,
       );
       return;
     }
@@ -376,7 +395,7 @@ export class AllDeliverymanComponent implements OnInit {
       };
 
       const response = await firstValueFrom(
-        this.apiService.sendNotification(body)
+        this.apiService.sendNotification(body),
       );
 
       // رسالة نجاح لطيفة مع الاسم

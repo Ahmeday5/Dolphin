@@ -50,7 +50,7 @@ export class EditDeliverymanComponent implements OnInit {
   };
 
   newPassword: string = '';
-  private readonly API_BASE_URL = 'http://78.89.159.126:9393/PharmacyAPI';
+  private readonly API_BASE_URL = 'http://78.89.159.126:9393/PharmacyDolphenAPI';
 
   constructor(
     private route: ActivatedRoute,

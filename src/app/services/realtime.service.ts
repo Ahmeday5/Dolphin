@@ -19,7 +19,7 @@ import { Observable } from 'rxjs';
 import { InDeliveryOrders } from '../types/InDeliveryOrders.type';
 import { allDeliverymen } from '../types/deliverymen.type';
 import { getDoc } from '@angular/fire/firestore';
-import { limit } from 'firebase/firestore';
+import { deleteDoc, limit } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root', // singleton service متاح لكل المشروع
@@ -219,5 +219,18 @@ export class RealtimeService {
       ...flags,
       lastUpdate: serverTimestamp(),
     });
+  }
+
+  async deleteDeliveryman(id: number | string): Promise<void> {
+    const idStr = String(id).trim();
+    const docRef = doc(this.firestore, 'deliverymen', idStr);
+
+    try {
+      await deleteDoc(docRef);
+      console.log(`تم حذف المندوب ${idStr} من Firestore`);
+    } catch (err) {
+      console.error(`فشل حذف المندوب ${idStr} من Firestore:`, err);
+      throw err; // نلقي الخطأ للـ caller يتعامل معاه
+    }
   }
 }

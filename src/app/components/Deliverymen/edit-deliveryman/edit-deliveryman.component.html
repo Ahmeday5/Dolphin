@@ -69,14 +69,7 @@
               <label for="newPassword" class="form-label">كلمة المرور الجديدة (أدخل كلمة مرور جديدة إذا أردت
                 تغييرها)</label>
               <input type="password" class="form-control" id="newPassword" name="newPassword" [(ngModel)]="newPassword"
-                placeholder="أدخل كلمة مرور جديدة إذا أردت تغييرها" minlength="8"
-                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%?&])[A-Za-z\d@$!%?&]{8,}$"
-                #newPasswordInput="ngModel" />
-              <!-- غيرت الـ #ref لإصلاح الـ binding -->
-              <div class="invalid-feedback" *ngIf="newPasswordInput.touched && newPasswordInput.invalid">
-                كلمة المرور يجب أن تكون 8 أحرف على الأقل، تحتوي على حرف كبير، صغير، رقم، ورمز خاص.
-              </div>
-              <div class="valid-feedback">يبدو جيدًا!</div>
+                placeholder="أدخل كلمة مرور جديدة إذا أردت تغييرها" #newPasswordInput="ngModel" />
             </div>
 
             <!-- أضف input للصورة + معاينة -->

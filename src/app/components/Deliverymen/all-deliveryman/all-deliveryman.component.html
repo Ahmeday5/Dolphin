@@ -126,15 +126,13 @@
                   <div class="col-md-12 form-section mb-3">
                     <label for="password" class="form-label">كلمة المرور</label>
                     <input [type]="showPassword ? 'text' : 'password'" placeholder="ادخل كلمة المرور" id="password"
-                      class="form-control" name="password" [(ngModel)]="deliverymen.password" required minlength="8"
-                      pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%?&])[A-Za-z\d@$!%?&]{8,}$" #password="ngModel">
+                      class="form-control" name="password" [(ngModel)]="deliverymen.password" required
+                      #password="ngModel">
                     <span class="password-toggle" (click)="togglePassword()">
                       <i class="fa-regular {{ showPassword ? 'fa-eye-slash' : 'fa-eye' }}"
                         style="color: var(--thrid-color);"></i>
                     </span>
-                    <div class="invalid-feedback">
-                      يرجى إدخال كلمة مرور قوية: 8 أحرف على الأقل، حرف كبير، صغير، رقم، ورمز خاص
-                    </div>
+                    <div class="invalid-feedback">يرجى إدخال كلمة مرور صالحة</div>
                     <div class="valid-feedback">يبدو جيدًا!</div>
                   </div>
                   <div class="modal-footer d-flex justify-content-around">
@@ -191,8 +189,8 @@
                     <td>{{ (currentPage - 1) * itemsPerPage + i + 1 }}</td>
                     <td>
                       <!-- الصورة مع click للـ modal -->
-                      <img src="http://78.89.159.126:9393/PharmacyAPI{{ deliveryman.imageUrl }}"
-                        style="width: 60px; cursor: pointer;" class="img-fluid" alt="not found"
+                      <img src="http://78.89.159.126:9393/PharmacyDolphenAPI{{ deliveryman.imageUrl }}"
+                        style="width: 60px; height: 60px; cursor: pointer;" class="img-fluid" alt="not found"
                         (click)="showImage(deliveryman.imageUrl)" data-bs-toggle="modal" data-bs-target="#imageModal">
                     </td>
                     <td>{{deliveryman.id}}</td>
