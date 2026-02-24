@@ -196,18 +196,18 @@
                     <td>{{deliveryman.id}}</td>
                     <td>{{deliveryman.name}}</td>
                     <td>{{deliveryman.email}}</td>
-                    <td> @if (deliveryman.isAvaliable === true) {
+                    <td> @if (deliveryman.isAvailable === true) {
                       <span class="status-pending">جاهز</span>
-                      } @else if (deliveryman.isAvaliable === false) {
+                      } @else if (deliveryman.isAvailable === false) {
                       <span class="status-delivered">خارج الخدمة</span>
                       } @else {
-                      <span>{{ deliveryman.isAvaliable }}</span>
+                      <span>{{ deliveryman.isAvailable }}</span>
                       }
                     </td>
                     <td>
                       <!-- زر الجرس -->
                       <button class="btn btn-primary btn-sm" (click)="sendBell(deliveryman.id)"
-                        [disabled]="deliveryman.isAvaliable === false"
+                        [disabled]="deliveryman.isAvailable === false"
                         title="{{ deliveryman.deviceToken ? 'إرسال تنبيه للمندوب' : 'المندوب غير متصل حاليًا' }}">
                         <i class="fa-solid fa-bell"></i>
                       </button>
