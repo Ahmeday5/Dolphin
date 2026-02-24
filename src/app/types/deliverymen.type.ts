@@ -3,7 +3,7 @@ export interface allDeliverymen {
   name: string;
   email?: string;
   password?: string;
-  isAvaliable: boolean;
+  isAvailable: boolean;
   imageUrl?: string;
   deviceToken?: string | null;
   currentLat?: number;  // آخر موقع

@@ -282,7 +282,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       const bounds = new google.maps.LatLngBounds();
       let hasAvailable = false;
 
-      this.Deliverymen.filter((d) => d.isAvaliable === true).forEach((d) => {
+      this.Deliverymen.filter((d) => d.isAvailable === true).forEach((d) => {
         const lat = d.currentLat ?? this.center.lat;
         const lng = d.currentLng ?? this.center.lng;
         bounds.extend({ lat, lng });
@@ -370,7 +370,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.Deliverymen = data.map((d) => ({
         id: d.id,
         name: d.name,
-        isAvaliable: d.isAvaliable ?? false,
+        isAvailable: d.isAvailable ?? false,
         imageUrl: d.imageUrl,
         deviceToken: d.deviceToken || null,
         currentLat: d.currentLat ?? 30.0444,
@@ -405,7 +405,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
         // حدث availableDeliveryMan
         this.availableDeliveryMan = this.Deliverymen.filter(
-          (d) => d.isAvaliable,
+          (d) => d.isAvailable,
         ).map((d) => ({ id: d.id as number, name: d.name }));
       } catch (error) {
         console.error('خطأ في جلب deviceToken من backend:', error);
@@ -438,7 +438,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       const idStr = String(d.id); // ← دايمًا string
       console.log(`  معالجة مندوب ID: ${idStr} (${typeof d.id})`);
 
-      const isAvailable = d.isAvaliable ?? false;
+      const isAvailable = d.isAvailable ?? false;
 
       let lat = d.currentLat ?? 30.0444;
       let lng = d.currentLng ?? 31.2357;
@@ -551,7 +551,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     /*if (this.googleMap?.googleMap && this.Deliverymen.length > 0) {
       const bounds = new google.maps.LatLngBounds();
-      this.Deliverymen.filter((d) => d.isAvaliable).forEach((d) => {
+      this.Deliverymen.filter((d) => d.isAvailable).forEach((d) => {
         bounds.extend({
           lat: d.currentLat ?? 30.0444,
           lng: d.currentLng ?? 31.2357,
@@ -607,7 +607,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         const bounds = new google.maps.LatLngBounds();
         let hasAvailable = false;
 
-        this.Deliverymen.filter((d) => d.isAvaliable).forEach((d) => {
+        this.Deliverymen.filter((d) => d.isAvailable).forEach((d) => {
           bounds.extend({
             lat: d.currentLat ?? 30.0444,
             lng: d.currentLng ?? 31.2357,

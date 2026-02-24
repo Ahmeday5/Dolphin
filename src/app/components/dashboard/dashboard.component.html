@@ -35,7 +35,7 @@
                 @if (Deliverymen.length > 0) {
                 @for (deliveryman of validDeliverymen; track deliveryman.id!.toString()) {
 
-                @if (deliveryman.isAvaliable === true) {
+                @if (deliveryman.isAvailable === true) {
                 <li class="ready list-group-item" (click)="focusOnDeliveryman(deliveryman.id)" style="cursor: pointer;">
                   <div class="d-flex justify-content-around">
                     <h5><span class="dot green"></span>{{deliveryman.name}} <small class="text-muted ms-2">{{
