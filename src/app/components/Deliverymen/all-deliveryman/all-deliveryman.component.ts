@@ -391,7 +391,7 @@ export class AllDeliverymanComponent implements OnInit {
       const body = {
         deviceToken: deliveryman.deviceToken,
         title: 'طلبية جاهزة!',
-        body: 'اذهب لاستلام الطلبية من الصيدلية علي الفور',
+        body: 'اذهب لاستلام الطلبية من نادي الدولفين علي الفور',
       };
 
       const response = await firstValueFrom(
