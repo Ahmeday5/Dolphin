@@ -1,73 +1,132 @@
-<div class="container mt-5 p-2 align-content-center">
-  <div class="row justify-content-center">
-    <div class="col-md-12">
-      <div class="row justify-content-center">
-        <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
-          <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
-            <path
-              d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-          </symbol>
-          <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
-            <path
-              d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-          </symbol>
-        </svg>
+<div class="login-page" dir="rtl">
+  <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
+    <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+      <path
+        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+    </symbol>
+    <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+      <path
+        d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+    </symbol>
+  </svg>
+
+  <div class="login-shell">
+    <!-- Left: Login form -->
+    <div class="login-panel">
+      <div class="login-panel-inner">
+        <div class="brand">
+          <img src="/assets/img/logo.png" class="brand-logo" alt="logo">
+          <h1>لوحة تحكم الكاشير</h1>
+          <p class="brand-subtitle">إدارة طلبات التوصيل</p>
+        </div>
+
         @if (errorMessage) {
-        <div class="col-md-12">
-          <div class="row justify-content-center">
-            <div class="alert alert-danger d-flex align-items-center mt-4 w-75" role="alert">
-              <svg class="bi flex-shrink-0 me-2 ms-3" width="24" height="24" role="img" aria-label="Danger:">
-                <use xlink:href="#exclamation-triangle-fill" />
-              </svg>
-              <div>{{ errorMessage }}</div>
-            </div>
-          </div>
+        <div class="alert alert-danger d-flex align-items-center custom-alert" role="alert">
+          <svg class="bi flex-shrink-0" width="20" height="20" role="img" aria-label="Danger:">
+            <use xlink:href="#exclamation-triangle-fill" />
+          </svg>
+          <div>{{ errorMessage }}</div>
         </div>
         }
-        <div class="col-md-8 form-content wow bounceInLeft mt-5">
-          <div class="header text-center pt-4">
-            <img src="/assets/img/logo.png" class="img-fluid" alt="logo">
-            <h1>لوحة تحكم الكاشير</h1>
-            <h3>إدارة طلبات التوصيل</h3>
-          </div>
-          <form class="mt-4" #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
-            <div class="form-group">
-              <label class="form-label" for="email">البريد الإلكتروني</label>
+
+        <form class="login-form" #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+          <div class="form-group">
+            <label class="form-label" for="email">البريد الإلكتروني</label>
+            <div class="input-with-icon">
+              <i class="fa-regular fa-envelope input-icon"></i>
               <input [(ngModel)]="email" id="email" name="email" type="email" class="form-control"
                 placeholder="البريد الإلكتروني" required />
             </div>
-            <div class="form-group mt-3">
-              <label class="form-label" for="password">كلمة المرور</label>
+          </div>
+          <div class="form-group mt-3">
+            <label class="form-label" for="password">كلمة المرور</label>
+            <div class="input-with-icon">
+              <i class="fa-solid fa-lock input-icon"></i>
               <input [(ngModel)]="password" id="password" name="password" class="form-control"
                 [type]="showPassword ? 'text' : 'password'" placeholder="كلمة المرور" required minlength="6" />
               <span class="password-toggle" (click)="togglePassword()">
-                <i class="fa-regular {{ showPassword ? 'fa-eye-slash' : 'fa-eye' }}"
-                  style="color: var(--thrid-color);"></i>
+                <i class="fa-regular {{ showPassword ? 'fa-eye-slash' : 'fa-eye' }}"></i>
               </span>
             </div>
-            <div class="remember-content row mt-2 justify-content-between">
-              <div class="col-3">
-                <div class="remember form-check">
-                  <label class="form-check-label" for="checkDefault">
-                    تذكرني
-                  </label>
-                  <input class="form-check-input" type="checkbox" id="checkDefault" name="rememberMe"
-                    [(ngModel)]="rememberMe">
-                </div>
-              </div>
-              <div class="col-5 forgetpass">
-                <div class="d-flex forgetpassdiv">
-                  <a href="#" class="btn" role="button" data-bs-toggle="button">نسيت كلمة المرور؟</a>
-                </div>
-              </div>
+          </div>
+          <div class="remember-content d-flex align-items-center justify-content-between mt-3">
+            <div class="remember form-check">
+              <input class="form-check-input" type="checkbox" id="checkDefault" name="rememberMe"
+                [(ngModel)]="rememberMe">
+              <label class="form-check-label" for="checkDefault">
+                تذكرني
+              </label>
             </div>
-            <div class="submit text-center mt-5">
-              <button type="submit" class="btn" [disabled]="isLoading || loginForm.invalid"><span *ngIf="isLoading"
-                  class="spinner-border spinner-border-sm"></span>
-                متابعة</button>
+            <div class="forgetpass">
+              <a href="#" class="btn" role="button" data-bs-toggle="button">نسيت كلمة المرور؟</a>
             </div>
-          </form>
+          </div>
+          <div class="submit mt-4">
+            <button type="submit" class="btn btn-submit" [disabled]="isLoading || loginForm.invalid">
+              <span *ngIf="isLoading" class="spinner-border spinner-border-sm"></span>
+              <span>متابعة</span>
+              <i class="fa-solid fa-arrow-left-long" *ngIf="!isLoading"></i>
+            </button>
+          </div>
+        </form>
+
+        <div class="login-footer">
+          <span>Developed by <strong>TheOneSystem</strong></span>
         </div>
+      </div>
+    </div>
+
+    <!-- Right: Info panel -->
+    <div class="info-panel">
+      <div class="info-panel-overlay"></div>
+      <div class="info-panel-content">
+        <div class="info-badge">
+          <i class="fa-solid fa-chart-line"></i>
+          <span>لوحة تحكم دولفين</span>
+        </div>
+        <h2>نظام إدارة متكامل لطلبات التوصيل ومتابعة المندوبين</h2>
+        <p class="info-desc">
+          منصة إدارية شاملة تساعدك على متابعة الطلبات، العملاء، والمندوبين بكل سهولة ودقة،
+          مع أدوات تحكم متقدمة تمنحك رؤية كاملة عن أداء أعمالك في الوقت الفعلي.
+        </p>
+
+        <ul class="feature-list">
+          <li class="feature-item">
+            <span class="feature-icon"><i class="fa-solid fa-chart-pie"></i></span>
+            <div>
+              <h4>الرئيسية</h4>
+              <p>نظرة شاملة على أداء النشاط من خلال لوحة تحكم مركزية.</p>
+            </div>
+          </li>
+          <li class="feature-item">
+            <span class="feature-icon"><i class="fa-solid fa-file-invoice-dollar"></i></span>
+            <div>
+              <h4>التقارير</h4>
+              <p>متابعة تقارير الطلبات والمعاملات بشكل دقيق ومنظم.</p>
+            </div>
+          </li>
+          <li class="feature-item">
+            <span class="feature-icon"><i class="fa-solid fa-users"></i></span>
+            <div>
+              <h4>العملاء</h4>
+              <p>عرض وتحديث بيانات العملاء وإدارة حساباتهم بسهولة.</p>
+            </div>
+          </li>
+          <li class="feature-item">
+            <span class="feature-icon"><i class="fa-solid fa-truck"></i></span>
+            <div>
+              <h4>المندوبين</h4>
+              <p>إدارة ومتابعة مندوبي التوصيل وحركة الطلبات الخاصة بهم.</p>
+            </div>
+          </li>
+          <li class="feature-item">
+            <span class="feature-icon"><i class="fa-solid fa-users-cog"></i></span>
+            <div>
+              <h4>المستخدمين</h4>
+              <p>التحكم في صلاحيات وحسابات مستخدمي النظام.</p>
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
   </div>

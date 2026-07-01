@@ -4,7 +4,6 @@ import { AuthService } from './services/auth.service';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { take } from 'rxjs/operators';
-import { SidebarComponent } from './components/layout/sidebar/sidebar.component';
 import { HeaderComponent } from './components/layout/header/header.component';
 import { NgwWowService } from 'ngx-wow';
 
