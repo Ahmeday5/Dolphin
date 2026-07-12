@@ -23,6 +23,25 @@ import { Subscription } from 'rxjs'; //firebase
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { GoogleMap, GoogleMapsModule, MapMarker } from '@angular/google-maps';
 import { environment } from '../../../environments/environment';
+
+/** الحالات المنطقية الثلاث المشتقة من isDelivering/isReturning */
+type TripState = 'delivering' | 'returning' | 'idle';
+
+/** يتتبع الرحلة الحالية لمندوب واحد: حالته المنطقية ونقطة بداية مساره */
+interface TripTracker {
+  state: TripState;
+  pathStartIndex: number;
+}
+
+function resolveTripState(d: {
+  isDelivering?: boolean;
+  isReturning?: boolean;
+}): TripState {
+  if (d.isDelivering) return 'delivering';
+  if (d.isReturning) return 'returning';
+  return 'idle';
+}
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -103,6 +122,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     options: google.maps.PolylineOptions;
   }[] = [];
   deliveryMarkers: Map<string, google.maps.Marker> = new Map(); // لتخزين الماركرات بالـ ID
+  private tripTrackers: Map<string, TripTracker> = new Map(); // حالة الرحلة الحالية لكل مندوب (لمنع اختلاط المسارات)
   visibleMarkers: Array<{
     id: number;
     position: google.maps.LatLngLiteral;
@@ -434,119 +454,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.Deliverymen.length,
     );
 
+    this.deliveryPolylines = [];
+
     this.Deliverymen.forEach((d) => {
       const idStr = String(d.id); // ← دايمًا string
-      console.log(`  معالجة مندوب ID: ${idStr} (${typeof d.id})`);
-
-      const isAvailable = d.isAvailable ?? false;
-
-      let lat = d.currentLat ?? 30.0444;
-      let lng = d.currentLng ?? 31.2357;
-      if (Array.isArray(d.currentPath) && d.currentPath.length > 0) {
-        const lastPoint = d.currentPath[d.currentPath.length - 1];
-        lat = lastPoint.lat ?? lat;
-        lng = lastPoint.lng ?? lng;
-      }
-      const newPosition: google.maps.LatLngLiteral = { lat, lng };
-
-      let rotation = 0;
-      if (Array.isArray(d.currentPath) && d.currentPath.length >= 2) {
-        const prev = d.currentPath[d.currentPath.length - 2];
-        const curr = d.currentPath[d.currentPath.length - 1];
-        rotation = this.calculateBearing(prev, curr);
+      const hasValidLocation = d.currentLat != null && d.currentLng != null;
+      if (!hasValidLocation) {
+        return; // مفيش موقع صالح → لا ماركر ولا خط لهذا المندوب
       }
 
-      let icon: google.maps.Icon | google.maps.Symbol;
-      if (rotation !== 0) {
-        icon = {
-          path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-          fillColor: isAvailable ? '#00cc44' : '#ff4444',
-          fillOpacity: 0.9,
-          strokeWeight: 1.5,
-          strokeColor: '#000000',
-          scale: 6.5,
-          rotation: rotation,
-          anchor: new google.maps.Point(0, 2.5),
-        };
-      } else {
-        icon = isAvailable
-          ? {
-              url: '/assets/img/food-truck.png',
-              scaledSize: new google.maps.Size(40, 40),
-              anchor: new google.maps.Point(20, 40),
-            }
-          : {
-              url: '/assets/img/food-truck-no.png',
-              scaledSize: new google.maps.Size(36, 36),
-              anchor: new google.maps.Point(18, 36),
-            };
-      }
+      const tripPath = this.updateTripTracker(idStr, d);
+      const fullPath = Array.isArray(d.currentPath) ? d.currentPath : [];
 
-      const title = `${d.name} (${isAvailable ? 'جاهز' : 'غير متاح'}) ${d.isDelivering ? '(في توصيل)' : ''} ${d.isReturning ? '(راجع)' : ''}`;
-
-      let info = `ID: ${d.id} | آخر تحديث: ${this.getTimeAgo(d.lastUpdate)}`;
-      const order = this.InDeliveryOrders.find((o) => o.deliveryManId === d.id);
-      if (order) {
-        info += `<br><strong>طلب:</strong> ${order.orderId || '?'}<br><strong>العميل:</strong> ${order.clientName || 'غير معروف'}<br><strong>الهاتف:</strong> ${order.clientphoneNumber || 'غير متوفر'}<br><strong>القيمة:</strong> ${order.amount || '?'} جنيه`;
-      }
-
-      // استخدام string كـ key
-      let marker = this.deliveryMarkers.get(idStr);
-
-      if (!marker) {
-        console.log(`  إنشاء ماركر جديد لـ ${idStr}`);
-        marker = new google.maps.Marker({
-          position: newPosition,
-          map: this.googleMap.googleMap,
-          icon,
-          title,
-          label: d.name.charAt(0),
-        });
-        this.deliveryMarkers.set(idStr, marker);
-
-        marker.addListener('click', () => {
-          this.focusOnDeliveryman(idStr);
-        });
-      } else {
-        console.log(`  تحديث ماركر موجود لـ ${idStr}`);
-        const currentPos = marker.getPosition();
-        if (currentPos) {
-          this.animateMarker(
-            marker,
-            currentPos,
-            new google.maps.LatLng(newPosition),
-            1200,
-          );
-        }
-        marker.setIcon(icon);
-        marker.setTitle(title);
-        marker.setLabel(d.name.charAt(0));
-      }
-    });
-
-    // باقي الكود (الخطوط، fitBounds، التتبع) بدون تغيير كبير
-    this.deliveryPolylines = [];
-    this.Deliverymen.forEach((d) => {
-      if (
-        (d.isDelivering || d.isReturning) &&
-        Array.isArray(d.currentPath) &&
-        d.currentPath.length >= 2
-      ) {
-        const path = d.currentPath.map((p) => ({
-          lat: p.lat ?? 30.0444,
-          lng: p.lng ?? 31.2357,
-        }));
-        this.deliveryPolylines.push({
-          orderId: d.id,
-          path,
-          options: {
-            strokeColor: d.isDelivering ? '#1E90FF' : '#FF4444',
-            strokeOpacity: 0.65,
-            strokeWeight: 5,
-            geodesic: true,
-          },
-        });
-      }
+      this.upsertMarker(idStr, d, fullPath);
+      this.pushPolylineIfActive(idStr, d, tripPath);
     });
 
     /*if (this.googleMap?.googleMap && this.Deliverymen.length > 0) {
@@ -632,6 +553,160 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.cdr.detectChanges();
   }
 
+  /**
+   * يحدّث حالة الرحلة الحالية للمندوب ويرجع الجزء الخاص بهذه الرحلة فقط من currentPath.
+   * عند أي انتقال idle -> delivering/returning يبدأ مسار جديد تمامًا (لا يختلط بالرحلة السابقة).
+   * عند أي انتقال delivering/returning -> idle يُصفّر المسار فورًا.
+   */
+  private updateTripTracker(
+    idStr: string,
+    d: allDeliverymen,
+  ): { lat: number; lng: number }[] {
+    const newState = resolveTripState(d);
+    const fullPath = Array.isArray(d.currentPath) ? d.currentPath : [];
+
+    let tracker = this.tripTrackers.get(idStr);
+    if (!tracker) {
+      tracker = {
+        state: newState,
+        pathStartIndex: newState === 'idle' ? fullPath.length : 0,
+      };
+      this.tripTrackers.set(idStr, tracker);
+    } else if (tracker.state !== newState) {
+      // انتقال بين الحالات: ابدأ مسارًا جديدًا لأي رحلة جديدة (delivering/returning)،
+      // أو صفّر المسار تمامًا عند العودة لـ idle
+      tracker.pathStartIndex =
+        newState === 'idle' ? fullPath.length : Math.max(fullPath.length - 1, 0);
+      tracker.state = newState;
+    }
+
+    if (newState === 'idle') {
+      return [];
+    }
+
+    // لو الـ path اتصفر من فايرستور (رحلة جديدة فعليًا) نتابع من البداية
+    if (tracker.pathStartIndex > fullPath.length) {
+      tracker.pathStartIndex = 0;
+    }
+
+    return fullPath.slice(tracker.pathStartIndex);
+  }
+
+  private upsertMarker(
+    idStr: string,
+    d: allDeliverymen,
+    tripPath: { lat: number; lng: number }[],
+  ) {
+    const isAvailable = d.isAvailable ?? false;
+
+    let lat = d.currentLat ?? 30.0444;
+    let lng = d.currentLng ?? 31.2357;
+    if (tripPath.length > 0) {
+      const lastPoint = tripPath[tripPath.length - 1];
+      lat = lastPoint.lat ?? lat;
+      lng = lastPoint.lng ?? lng;
+    }
+    const newPosition: google.maps.LatLngLiteral = { lat, lng };
+
+    let rotation = 0;
+    if (tripPath.length >= 2) {
+      const prev = tripPath[tripPath.length - 2];
+      const curr = tripPath[tripPath.length - 1];
+      rotation = this.calculateBearing(prev, curr);
+    }
+
+    let icon: google.maps.Icon | google.maps.Symbol;
+    if (rotation !== 0) {
+      icon = {
+        path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+        fillColor: isAvailable ? '#00cc44' : '#ff4444',
+        fillOpacity: 0.9,
+        strokeWeight: 1.5,
+        strokeColor: '#000000',
+        scale: 6.5,
+        rotation: rotation,
+        anchor: new google.maps.Point(0, 2.5),
+      };
+    } else {
+      icon = isAvailable
+        ? {
+            url: '/assets/img/food-truck.png',
+            scaledSize: new google.maps.Size(40, 40),
+            anchor: new google.maps.Point(20, 40),
+          }
+        : {
+            url: '/assets/img/food-truck-no.png',
+            scaledSize: new google.maps.Size(36, 36),
+            anchor: new google.maps.Point(18, 36),
+          };
+    }
+
+    const title = `${d.name} (${isAvailable ? 'جاهز' : 'غير متاح'}) ${d.isDelivering ? '(في توصيل)' : ''} ${d.isReturning ? '(راجع)' : ''}`;
+
+    let info = `ID: ${d.id} | آخر تحديث: ${this.getTimeAgo(d.lastUpdate)}`;
+    const order = this.InDeliveryOrders.find((o) => o.deliveryManId === d.id);
+    if (order) {
+      info += `<br><strong>طلب:</strong> ${order.orderId || '?'}<br><strong>العميل:</strong> ${order.clientName || 'غير معروف'}<br><strong>الهاتف:</strong> ${order.clientphoneNumber || 'غير متوفر'}<br><strong>القيمة:</strong> ${order.amount || '?'} جنيه`;
+    }
+
+    let marker = this.deliveryMarkers.get(idStr);
+
+    if (!marker) {
+      console.log(`  إنشاء ماركر جديد لـ ${idStr}`);
+      marker = new google.maps.Marker({
+        position: newPosition,
+        map: this.googleMap.googleMap,
+        icon,
+        title,
+        label: d.name.charAt(0),
+      });
+      this.deliveryMarkers.set(idStr, marker);
+
+      marker.addListener('click', () => {
+        this.focusOnDeliveryman(idStr);
+      });
+    } else {
+      console.log(`  تحديث ماركر موجود لـ ${idStr}`);
+      const currentPos = marker.getPosition();
+      if (currentPos) {
+        this.animateMarker(
+          marker,
+          currentPos,
+          new google.maps.LatLng(newPosition),
+          1200,
+        );
+      }
+      marker.setIcon(icon);
+      marker.setTitle(title);
+      marker.setLabel(d.name.charAt(0));
+    }
+  }
+
+  private pushPolylineIfActive(
+    idStr: string,
+    d: allDeliverymen,
+    tripPath: { lat: number; lng: number }[],
+  ) {
+    if (tripPath.length < 2) {
+      return; // idle، أو رحلة لسه بنقطة واحدة → لا يوجد خط
+    }
+
+    const path = tripPath.map((p) => ({
+      lat: p.lat ?? 30.0444,
+      lng: p.lng ?? 31.2357,
+    }));
+    this.deliveryPolylines.push({
+      orderId: d.id,
+      path,
+      options: {
+        strokeColor: d.isDelivering ? '#1E90FF' : '#FF4444',
+        strokeOpacity: 0.65,
+        strokeWeight: 5,
+        geodesic: true,
+      },
+    });
+  }
+
   // دالة للتحريك السلس (تستخدم linear interpolation)
   private animateMarker(
     marker: google.maps.Marker,
@@ -701,6 +776,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     // الغاء كل الاشتراكات للـ Firestore لمنع memory leaks
     this.realtimeSubs.forEach((s) => s.unsubscribe());
+    this.tripTrackers.clear();
   }
 
   /*async fetchAvailableDeliveryMan(): Promise<void> {
